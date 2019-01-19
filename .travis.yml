@@ -1,0 +1,17 @@
+language: python
+
+cache:
+  - pip
+
+python:
+ - "2.7"
+ - "3.6"
+ - "3.7-dev"
+
+install:
+ - pip install requirements.txt
+
+script:
+ - flake8 muckrock
+ - coverage run test.py
+ - coverage report -m

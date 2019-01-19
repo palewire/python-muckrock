@@ -1,0 +1,10 @@
+__pycache__
+*.egg-*
+.tox/
+MANIFEST
+.coverage
+build/*
+dist/*
+*.pyc
+*.swp
+.DS_Store
