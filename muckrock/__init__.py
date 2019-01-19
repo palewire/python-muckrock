@@ -20,7 +20,7 @@ class BaseMuckRockClient(object):
 
     def _get_request(self, url, params, headers={}):
         headers.update({'User-Agent': self.USER_AGENT})
-        return requests.get(url, headers=headers).json()
+        return requests.get(url, params=params, headers=headers).json()
 
 
 class MuckRock(BaseMuckRockClient):
@@ -64,4 +64,4 @@ class FoiaClient(BaseMuckRockClient):
             params['jurisdiction'] = jurisdiction
         if user:
             params['agency'] = agency
-        return self._get_request(self.BASE_URI + self.endpoint, params)
+        return self._get_request(self.BASE_URI + self.endpoint, params)['results']

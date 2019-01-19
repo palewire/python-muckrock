@@ -12,7 +12,8 @@ class GetTest(unittest.TestCase):
 
     def test_foia(self):
         self.public_client.foia.get()
-        self.public_client.foia.get(status="done")
+        done_list = self.public_client.foia.get(status="done")
+        [self.assertTrue(done['status'] == 'done') for done in done_list]
 
 
 if __name__ == '__main__':
