@@ -49,7 +49,8 @@ class FoiaClient(BaseMuckRockClient):
         status=None,
         embargo=None,
         jurisdiction=None,
-        agency=None
+        agency=None,
+        page_size=100
     ):
         params = {}
         if user:
@@ -64,4 +65,5 @@ class FoiaClient(BaseMuckRockClient):
             params['jurisdiction'] = jurisdiction
         if user:
             params['agency'] = agency
+        params['page_size'] = page_size
         return self._get_request(self.BASE_URI + self.endpoint, params)['results']
