@@ -19,6 +19,10 @@ class GetTest(unittest.TestCase):
 
         sorted_list = self.public_client.foia.get(status="done", ordering="-datetime_done")
 
+        latest_list = self.public_client.foia.get(
+            has_datetime_submitted=True,
+            ordering="-datetime_submitted"
+        )
 
 
 if __name__ == '__main__':

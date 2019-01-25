@@ -51,6 +51,7 @@ class FoiaClient(BaseMuckRockClient):
         embargo=None,
         jurisdiction=None,
         agency=None,
+        has_datetime_submitted=None,
         ordering="-datetime_submitted",
     ):
         params = {}
@@ -66,5 +67,11 @@ class FoiaClient(BaseMuckRockClient):
             params['jurisdiction'] = jurisdiction
         if user:
             params['agency'] = agency
+        datetime_submitted_choices = {
+            None: 1,
+            True: 2,
+            False: 3,
+        }
+        params['has_datetime_submitted'] = datetime_submitted_choices[has_datetime_submitted]
         params['ordering'] = ordering
         return self._get_request(self.BASE_URI + self.endpoint, params)['results']
