@@ -20,7 +20,8 @@ class BaseMuckRockClient(object):
 
     def _get_request(self, url, params, headers={}):
         headers.update({'User-Agent': self.USER_AGENT})
-        return requests.get(url, params=params, headers=headers).json()
+        r = requests.get(url, params=params, headers=headers)
+        return r.json()
 
 
 class MuckRock(BaseMuckRockClient):
@@ -50,8 +51,7 @@ class FoiaClient(BaseMuckRockClient):
         embargo=None,
         jurisdiction=None,
         agency=None,
-        page_size=100,
-        ordering="-id",
+        ordering="-datetime_submitted",
     ):
         params = {}
         if user:
@@ -66,6 +66,5 @@ class FoiaClient(BaseMuckRockClient):
             params['jurisdiction'] = jurisdiction
         if user:
             params['agency'] = agency
-        params['page_size'] = page_size
         params['ordering'] = ordering
         return self._get_request(self.BASE_URI + self.endpoint, params)['results']
