@@ -17,7 +17,11 @@ class GetTest(unittest.TestCase):
         done_list = self.public_client.foia.get(status="done")
         [self.assertEqual(done['status'], 'done') for done in done_list]
 
-        sorted_list = self.public_client.foia.get(status="done", ordering="-datetime_done")
+        sorted_list = self.public_client.foia.get(
+            status="done",
+            has_datetime_done=True,
+            ordering="-datetime_done"
+        )
 
         latest_list = self.public_client.foia.get(
             has_datetime_submitted=True,
