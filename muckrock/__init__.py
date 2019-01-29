@@ -17,7 +17,7 @@ class BaseMuckRockClient(object):
         self.BASE_URI = base_uri or BaseMuckRockClient.BASE_URI
         self.username = username
         self.password = password
-        self.token = None
+        self.token = token
         if self.username and self.password:
             response = requests.post(
                 'https://www.muckrock.com/api_v1/token-auth/',
@@ -41,8 +41,8 @@ class MuckRock(BaseMuckRockClient):
     """
     The public interface for the DocumentCloud API
     """
-    def __init__(self, username=None, password=None, base_uri=None):
-        super(MuckRock, self).__init__(username, password, base_uri)
+    def __init__(self, username=None, password=None, token=None, base_uri=None):
+        super(MuckRock, self).__init__(username, password, token, base_uri)
         self.foia = FoiaClient(
             self.username,
             self.password,
