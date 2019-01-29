@@ -13,15 +13,28 @@ class BaseMuckRockClient(object):
     BASE_URI = 'https://www.muckrock.com/api_v1/'
     USER_AGENT = ""
 
-    def __init__(self, username, password, base_uri=None):
+    def __init__(self, username, password, token, base_uri=None):
         self.BASE_URI = base_uri or BaseMuckRockClient.BASE_URI
         self.username = username
         self.password = password
+        self.token = None
+        if self.username and self.password:
+            response = requests.post(
+                'https://www.muckrock.com/api_v1/token-auth/', 
+                data={
+                    'username': self.username,
+                    'password': self.password
+                })
+            if not response.raise_for_status():
+                data = response.json()
+                self.token = data['token']
 
     def _get_request(self, url, params, headers={}):
+        if self.token:
+            headers.update({'Authorization': 'Token %s' % self.token})
         headers.update({'User-Agent': self.USER_AGENT})
-        r = requests.get(url, params=params, headers=headers)
-        return r.json()
+        response = requests.get(url, params=params, headers=headers)
+        return response.json()
 
 
 class MuckRock(BaseMuckRockClient):
@@ -33,6 +46,7 @@ class MuckRock(BaseMuckRockClient):
         self.foia = FoiaClient(
             self.username,
             self.password,
+            self.token,
             base_uri
         )
 
