@@ -4,6 +4,7 @@ Python library for interacting with the MuckRock API.
 https://www.muckrock.com/api/
 """
 import requests
+from .exceptions import RequestNotFound
 
 
 class BaseMuckRockClient(object):
@@ -19,7 +20,7 @@ class BaseMuckRockClient(object):
         self.password = password
         self.token = token
 
-    def _get_request(self, url, params, headers={}):
+    def _get_request(self, url, params={}, headers={}):
         """
         Makes a GET request to the Muckrock API.
 
@@ -40,7 +41,7 @@ class MuckRock(BaseMuckRockClient):
         # Set all the basic configuration options to this, the parent instance.
         super(MuckRock, self).__init__(username, password, token, base_uri)
         # Retrieve a token if necessary
-        if not not self.token and self.username and self.password:
+        if not self.token and self.username and self.password:
             self.token = self._get_token()
 
         # Initialize the API endpoint methods that are children to this parent
@@ -71,7 +72,17 @@ class FoiaClient(BaseMuckRockClient):
     """
     endpoint = "foia"
 
-    def get(
+    def get(self, id):
+        """
+        Returns a request with the specified identifer.
+        """
+        url = self.BASE_URI + self.endpoint + "/{}/".format(id)
+        r = self._get_request(url)
+        if r == {'detail': 'Not found.'}:
+            raise RequestNotFound("Request {} not found".format(id))
+        return r
+
+    def filter(
         self,
         user=None,
         title=None,
@@ -83,6 +94,9 @@ class FoiaClient(BaseMuckRockClient):
         has_datetime_done=None,
         ordering="-datetime_submitted",
     ):
+        """
+        Returns a list of requests that match the provide input filters.
+        """
         params = {}
         if user:
             params['user'] = user

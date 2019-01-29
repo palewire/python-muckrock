@@ -26,13 +26,19 @@ Import the MuckRock client and initialize it.
 Request all of the latest FOIA requests.
 
 ```python
->>> request_list = client.foia.get()
+>>> request_list = client.foia.all()
 ```
 
 Request the latest completed FOIA requests.
 
 ```python
->>> request_list = client.foia.get(status="done")
+>>> request_list = client.foia.filter(status="done")
+```
+
+Request a particular FOIA request by its identifier.
+
+```python
+>>> request = client.foia.get(100)
 ```
 
 JSON is returned.
@@ -40,4 +46,4 @@ JSON is returned.
 
 ### Yet to come.
 
-Almost everything. This library does not now support anything beyond simple FOIA list requests. It cannot authenticate users. Nor can it create new requests. The API does support those features and I hope to gradually add them. 
+Almost everything. This library does not now support anything beyond simple FOIA list requests. It cannot authenticate users. Nor can it create new requests. The API does support those features and I hope to gradually add them.
