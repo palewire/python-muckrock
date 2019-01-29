@@ -1,3 +1,4 @@
+import os
 import unittest
 from muckrock import MuckRock
 
@@ -9,6 +10,10 @@ class GetTest(unittest.TestCase):
         Initialize a bunch of variables we'll use across tests.
         """
         self.public_client = MuckRock()
+        self.private_client = MuckRock(
+            username=os.getenv("MUCKROCK_TEST_USERNAME"),
+            password=os.getenv("MUCKROCK_TEST_PASSWORD")
+        )
 
     def test_foia(self):
         default_list = self.public_client.foia.get()
@@ -27,6 +32,8 @@ class GetTest(unittest.TestCase):
             has_datetime_submitted=True,
             ordering="-datetime_submitted"
         )
+
+        private_obj = self.private_client.foia.get()
 
 
 if __name__ == '__main__':
