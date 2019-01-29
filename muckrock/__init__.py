@@ -18,23 +18,33 @@ class BaseMuckRockClient(object):
         self.username = username
         self.password = password
         self.token = token
-        if self.username and self.password:
-            response = requests.post(
-                'https://www.muckrock.com/api_v1/token-auth/',
-                data={
-                    'username': self.username,
-                    'password': self.password
-                })
-            if not response.raise_for_status():
-                data = response.json()
-                self.token = data['token']
+        if self.username and self.password and not self.token:
+            self.token = self._get_token()
 
     def _get_request(self, url, params, headers={}):
+        """
+        Makes a GET request to the Muckrock API.
+
+        Returns the response as JSON.
+        """
         if self.token:
             headers.update({'Authorization': 'Token %s' % self.token})
         headers.update({'User-Agent': self.USER_AGENT})
         response = requests.get(url, params=params, headers=headers)
         return response.json()
+
+    def _get_token(self):
+        """
+        Uses the provided username and password to return an API token.
+        """
+        r = requests.post(
+            'https://www.muckrock.com/api_v1/token-auth/',
+            data={
+                'username': self.username,
+                'password': self.password
+            }
+        )
+        return r.json()['token']
 
 
 class MuckRock(BaseMuckRockClient):
