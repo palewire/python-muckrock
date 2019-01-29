@@ -61,8 +61,8 @@ When you authenticate with the MuckRock API, it supplies a token you can re-use.
 Rather than putting your user name and password in your code, consider storing the token in something like an environmental variable, and using that to authenticate with the API.
 
 ```python
-from muckrock import MuckRock
-import os
+>>> import os
+>>> from muckrock import MuckRock
 >>> client = MuckRock(token=os.environ['MUCKROCK_TOKEN'])
 ```
 
