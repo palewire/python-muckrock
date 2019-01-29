@@ -37,7 +37,7 @@ Request the latest completed FOIA requests.
 
 JSON is returned.
 
-## Authentication
+### Authentication
 
 To authenticate with the MuckRock API, simply supply your username and password when you instantiate the MuckRock client. This will you allow you to do things like access your embargoed requests.
 
