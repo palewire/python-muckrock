@@ -11,15 +11,13 @@ class BaseMuckRockClient(object):
     Patterns common to all of the different API methods.
     """
     BASE_URI = 'https://www.muckrock.com/api_v1/'
-    USER_AGENT = ""
+    USER_AGENT = "python-muckrock (https://github.com/datadesk/python-muckrock)"
 
     def __init__(self, username, password, token, base_uri=None):
         self.BASE_URI = base_uri or BaseMuckRockClient.BASE_URI
         self.username = username
         self.password = password
         self.token = token
-        if not self.token and self.username and self.password:
-            self.token = self._get_token()
 
     def _get_request(self, url, params, headers={}):
         """
@@ -33,6 +31,26 @@ class BaseMuckRockClient(object):
         response = requests.get(url, params=params, headers=headers)
         return response.json()
 
+
+class MuckRock(BaseMuckRockClient):
+    """
+    The public interface for the DocumentCloud API
+    """
+    def __init__(self, username=None, password=None, token=None, base_uri=None):
+        # Set all the basic configuration options to this, the parent instance.
+        super(MuckRock, self).__init__(username, password, token, base_uri)
+        # Retrieve a token if necessary
+        if not not self.token and self.username and self.password:
+            self.token = self._get_token()
+
+        # Initialize the API endpoint methods that are children to this parent
+        self.foia = FoiaClient(
+            self.username,
+            self.password,
+            self.token,
+            base_uri
+        )
+
     def _get_token(self):
         """
         Uses the provided username and password to retrieve an API token.
@@ -45,20 +63,6 @@ class BaseMuckRockClient(object):
             }
         )
         return r.json()['token']
-
-
-class MuckRock(BaseMuckRockClient):
-    """
-    The public interface for the DocumentCloud API
-    """
-    def __init__(self, username=None, password=None, token=None, base_uri=None):
-        super(MuckRock, self).__init__(username, password, token, base_uri)
-        self.foia = FoiaClient(
-            self.username,
-            self.password,
-            self.token,
-            base_uri
-        )
 
 
 class FoiaClient(BaseMuckRockClient):
