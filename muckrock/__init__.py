@@ -18,7 +18,7 @@ class BaseMuckRockClient(object):
         self.username = username
         self.password = password
         self.token = token
-        if self.username and self.password and not self.token:
+        if not self.token and self.username and self.password:
             self.token = self._get_token()
 
     def _get_request(self, url, params, headers={}):
@@ -35,7 +35,7 @@ class BaseMuckRockClient(object):
 
     def _get_token(self):
         """
-        Uses the provided username and password to return an API token.
+        Uses the provided username and password to retrieve an API token.
         """
         r = requests.post(
             'https://www.muckrock.com/api_v1/token-auth/',
