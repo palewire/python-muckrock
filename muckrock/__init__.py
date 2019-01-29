@@ -20,7 +20,7 @@ class BaseMuckRockClient(object):
         self.token = None
         if self.username and self.password:
             response = requests.post(
-                'https://www.muckrock.com/api_v1/token-auth/', 
+                'https://www.muckrock.com/api_v1/token-auth/',
                 data={
                     'username': self.username,
                     'password': self.password
