@@ -43,7 +43,29 @@ Request a particular FOIA request by its identifier.
 
 JSON is returned.
 
+### Authentication
+
+To authenticate with the MuckRock API, simply supply your username and password when you instantiate the MuckRock client. This will you allow you to do things like access your embargoed requests.
+
+```python
+>>> client = MuckRock(username="my_username", password="my_password")
+```
+
+When you authenticate with the MuckRock API, it supplies a token you can re-use. You can access that token by inspecting the `token` property of your client.
+
+```python
+>>> client.token
+'aaabbbcccdddeee111222333444555666777888fff'
+```
+
+Rather than putting your user name and password in your code, consider storing the token in something like an environmental variable, and using that to authenticate with the API.
+
+```python
+from muckrock import MuckRock
+import os
+>>> client = MuckRock(token=os.environ['MUCKROCK_TOKEN'])
+```
 
 ### Yet to come.
 
-Almost everything. This library does not now support anything beyond simple FOIA list requests. It cannot authenticate users. Nor can it create new requests. The API does support those features and I hope to gradually add them.
+Almost everything. This library does not now support anything beyond simple FOIA list requests and authentication. It cannot create new requests, for example. The API does support those features and I hope to gradually add them.
