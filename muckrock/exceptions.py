@@ -7,8 +7,8 @@ class CredentialsMissingError(Exception):
     pass
 
 
-class RequestNotFound(Exception):
+class ObjectNotFound(Exception):
     """
-    Raised if an API for a request does not return a result.
+    Raised if an API get request does not return a result.
     """
     pass

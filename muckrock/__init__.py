@@ -4,7 +4,7 @@ Python library for interacting with the MuckRock API.
 https://www.muckrock.com/api/
 """
 import requests
-from .exceptions import RequestNotFound
+from .exceptions import ObjectNotFound
 
 
 class BaseMuckRockClient(object):
@@ -45,12 +45,14 @@ class MuckRock(BaseMuckRockClient):
             self.token = self._get_token()
 
         # Initialize the API endpoint methods that are children to this parent
-        self.foia = FoiaClient(
+        endpoint_args = (
             self.username,
             self.password,
             self.token,
             base_uri
         )
+        self.foia = FoiaEndpoint(*endpoint_args)
+        self.agency = AgencyEndpoint(*endpoint_args)
 
     def _get_token(self):
         """
@@ -66,12 +68,10 @@ class MuckRock(BaseMuckRockClient):
         return r.json()['token']
 
 
-class FoiaClient(BaseMuckRockClient):
+class BaseEndpointMixin(object):
     """
-    Methods for collecting FOIA requests.
+    Methods shared by endpoint classes.
     """
-    endpoint = "foia"
-
     def get(self, id):
         """
         Returns a request with the specified identifer.
@@ -79,8 +79,22 @@ class FoiaClient(BaseMuckRockClient):
         url = self.BASE_URI + self.endpoint + "/{}/".format(id)
         r = self._get_request(url)
         if r == {'detail': 'Not found.'}:
-            raise RequestNotFound("Request {} not found".format(id))
+            raise ObjectNotFound("Request {} not found".format(id))
         return r
+
+
+class AgencyEndpoint(BaseMuckRockClient, BaseEndpointMixin):
+    """
+    Methods for collecting agencies.
+    """
+    endpoint = "agency"
+
+
+class FoiaEndpoint(BaseMuckRockClient, BaseEndpointMixin):
+    """
+    Methods for collecting FOIA requests.
+    """
+    endpoint = "foia"
 
     def filter(
         self,
@@ -124,3 +138,9 @@ class FoiaClient(BaseMuckRockClient):
         params['has_datetime_done'] = datetime_done_choices[has_datetime_done]
         params['ordering'] = ordering
         return self._get_request(self.BASE_URI + self.endpoint, params)['results']
+
+    def latest(self):
+        """
+        An alias to the filter command with no input.
+        """
+        return self.filter()

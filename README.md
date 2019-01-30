@@ -26,7 +26,7 @@ Import the MuckRock client and initialize it.
 Request all of the latest FOIA requests.
 
 ```python
->>> request_list = client.foia.filter()
+>>> request_list = client.foia.latest()
 ```
 
 Request the latest completed FOIA requests.
