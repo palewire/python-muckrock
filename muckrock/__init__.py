@@ -90,6 +90,39 @@ class JurisdictionEndpoint(BaseMuckRockClient, BaseEndpointMixin):
     """
     endpoint = "jurisdiction"
 
+    def filter(
+        self,
+        name=None,
+        abbreviation=None,
+        parent_id=None,
+        level=None,
+        requires_proxy=None
+    ):
+        """
+        Returns a list of requests that match the provide input filters.
+        """
+        params = {}
+        if name:
+            params['name'] = name
+        if abbreviation:
+            params['abbrev'] = abbreviation
+        if parent_id:
+            params['parent'] = parent_id
+        if level:
+            level_choices = {
+                "federal": 'f',
+                'state': 's',
+                'local': 'l'
+            }
+            params['level'] = level_choices[level.lower()]
+        requires_proxy_choices = {
+            None: 1,
+            True: 2,
+            False: 3,
+        }
+        params['law__requires_proxy'] = requires_proxy_choices[requires_proxy]
+        return self._get_request(self.BASE_URI + self.endpoint, params)['results']
+
 
 class AgencyEndpoint(BaseMuckRockClient, BaseEndpointMixin):
     """
@@ -101,7 +134,7 @@ class AgencyEndpoint(BaseMuckRockClient, BaseEndpointMixin):
         self,
         name=None,
         status=None,
-        jurisdiction=None,
+        jurisdiction_id=None,
         requires_proxy=None
     ):
         """
@@ -112,8 +145,8 @@ class AgencyEndpoint(BaseMuckRockClient, BaseEndpointMixin):
             params['name'] = name
         if status:
             params['status'] = status
-        if jurisdiction:
-            params['jurisdiction'] = jurisdiction
+        if jurisdiction_id:
+            params['jurisdiction'] = jurisdiction_id
         requires_proxy_choices = {
             None: 1,
             True: 2,
@@ -135,8 +168,8 @@ class FoiaEndpoint(BaseMuckRockClient, BaseEndpointMixin):
         title=None,
         status=None,
         embargo=None,
-        jurisdiction=None,
-        agency=None,
+        jurisdiction_id=None,
+        agency_id=None,
         has_datetime_submitted=None,
         has_datetime_done=None,
         ordering="-datetime_submitted",
@@ -153,10 +186,10 @@ class FoiaEndpoint(BaseMuckRockClient, BaseEndpointMixin):
             params['status'] = status
         if embargo:
             params['embargo'] = embargo
-        if jurisdiction:
-            params['jurisdiction'] = jurisdiction
-        if user:
-            params['agency'] = agency
+        if jurisdiction_id:
+            params['jurisdiction'] = jurisdiction_id
+        if agency_id:
+            params['agency'] = agency_id
         datetime_submitted_choices = {
             None: 1,
             True: 2,

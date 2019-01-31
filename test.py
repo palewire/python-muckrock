@@ -18,11 +18,18 @@ class GetTest(unittest.TestCase):
         self.private_request_id = 67271
 
     def test_jurisdiction_get(self):
-        public_obj = self.public_client.agency.get(1)
+        public_obj = self.public_client.jurisdiction.get(1)
         self.assertEqual(public_obj['name'], "Massachusetts")
 
         with self.assertRaises(ObjectNotFound):
-            self.public_client.agency.get(999999999999999)
+            self.public_client.jurisdiction.get(999999999999999)
+
+    def test_jurisdiction_filter(self):
+        jurisdiction = self.public_client.jurisdiction.filter(name="Massachusetts")
+        self.assertEqual(jurisdiction[0]['id'], 1)
+
+        requires_proxy_list = self.public_client.jurisdiction.filter(requires_proxy=True)
+        [self.assertEqual(a['requires_proxy'], True) for a in requires_proxy_list]
 
     def test_agency_get(self):
         public_obj = self.public_client.agency.get(1)
