@@ -53,6 +53,7 @@ class MuckRock(BaseMuckRockClient):
         )
         self.foia = FoiaEndpoint(*endpoint_args)
         self.agency = AgencyEndpoint(*endpoint_args)
+        self.jurisdiction = JurisdictionEndpoint(*endpoint_args)
 
     def _get_token(self):
         """
@@ -81,6 +82,13 @@ class BaseEndpointMixin(object):
         if r == {'detail': 'Not found.'}:
             raise ObjectNotFound("Request {} not found".format(id))
         return r
+
+
+class JurisdictionEndpoint(BaseMuckRockClient, BaseEndpointMixin):
+    """
+    Methods for collecting agencies.
+    """
+    endpoint = "jurisdiction"
 
 
 class AgencyEndpoint(BaseMuckRockClient, BaseEndpointMixin):
