@@ -28,8 +28,9 @@ class GetTest(unittest.TestCase):
         jurisdiction = self.public_client.jurisdiction.filter(name="Massachusetts")
         self.assertEqual(jurisdiction[0]['id'], 1)
 
-        requires_proxy_list = self.public_client.jurisdiction.filter(requires_proxy=True)
-        [self.assertEqual(a['requires_proxy'], True) for a in requires_proxy_list]
+        fed_list = self.public_client.jurisdiction.filter(level="Federal")
+        self.assertEqual(len(fed_list), 1)
+        self.assertEqual(fed_list[0]['name'], "United States of America")
 
     def test_agency_get(self):
         public_obj = self.public_client.agency.get(1)
