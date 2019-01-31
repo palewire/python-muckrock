@@ -24,6 +24,24 @@ class GetTest(unittest.TestCase):
         with self.assertRaises(ObjectNotFound):
             self.public_client.agency.get(999999999999999)
 
+    def test_agency_filter(self):
+        agency = self.public_client.agency.filter(name="Suffolk County Sheriff's Department")
+        self.assertEqual(agency[0]['id'], 1)
+
+        requires_proxy_list = self.public_client.agency.filter(requires_proxy=True)
+        [self.assertEqual(a['requires_proxy'], '2') for a in requires_proxy_list]
+
+    def test_foia_get(self):
+        public_obj = self.public_client.foia.get(100)
+        self.assertEqual(public_obj['title'], "Cyber Security Analyst's Regular Reports")
+
+        private_obj = self.private_client.foia.get(self.private_request_id)
+        self.assertEqual(private_obj['title'], "@MayorOfLA Direct Messages")
+
+        with self.assertRaises(ObjectNotFound):
+            self.public_client.foia.get(999999999999999)
+            self.public_client.foia.get(self.private_request_id)
+
     def test_foia_filter(self):
         default_list = self.public_client.foia.latest()
         self.assertEqual(len(default_list), 50)
@@ -41,17 +59,6 @@ class GetTest(unittest.TestCase):
             has_datetime_submitted=True,
             ordering="-datetime_submitted"
         )
-
-    def test_foia_get(self):
-        public_obj = self.public_client.foia.get(100)
-        self.assertEqual(public_obj['title'], "Cyber Security Analyst's Regular Reports")
-
-        private_obj = self.private_client.foia.get(self.private_request_id)
-        self.assertEqual(private_obj['title'], "@MayorOfLA Direct Messages")
-
-        with self.assertRaises(ObjectNotFound):
-            self.public_client.foia.get(999999999999999)
-            self.public_client.foia.get(self.private_request_id)
 
 
 if __name__ == '__main__':

@@ -89,6 +89,31 @@ class AgencyEndpoint(BaseMuckRockClient, BaseEndpointMixin):
     """
     endpoint = "agency"
 
+    def filter(
+        self,
+        name=None,
+        status=None,
+        jurisdiction=None,
+        requires_proxy=None
+    ):
+        """
+        Returns a list of requests that match the provide input filters.
+        """
+        params = {}
+        if name:
+            params['name'] = name
+        if status:
+            params['status'] = status
+        if jurisdiction:
+            params['jurisdiction'] = jurisdiction
+        requires_proxy_choices = {
+            None: 1,
+            True: 2,
+            False: 3,
+        }
+        params['requires_proxy'] = requires_proxy_choices[requires_proxy]
+        return self._get_request(self.BASE_URI + self.endpoint, params)['results']
+
 
 class FoiaEndpoint(BaseMuckRockClient, BaseEndpointMixin):
     """
