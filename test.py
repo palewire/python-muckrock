@@ -56,7 +56,7 @@ class GetTest(unittest.TestCase):
 
     def test_foia_create(self):
         kwargs = dict(
-            agency_id=248,
+            agency_ids=248,
             title='API Test File Request',
             document_request="I would like the government's secret receipe for the world's best burrito"
         )
