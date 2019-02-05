@@ -54,7 +54,11 @@ class BaseMuckRockClient(object):
             json=data,
             headers=headers
         )
-        return r.json()
+        print(r.status_code)
+        rjson = r.json()
+        if rjson == {'detail': 'Invalid token.'}:
+            raise CredentialsWrongError(rjson['detail'])
+        return rjson
 
 
 class MuckRock(BaseMuckRockClient):
@@ -225,7 +229,7 @@ class FoiaEndpoint(BaseMuckRockClient, BaseEndpointMixin):
             data['full_text'] = full_text
         if attachments:
             data['attachments'] = attachments
-        return self._post_request(self.BASE_URI + self.endpoint, data)
+        return self._post_request(self.BASE_URI + self.endpoint + "/", data)
 
     def filter(
         self,
