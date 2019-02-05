@@ -54,7 +54,6 @@ class BaseMuckRockClient(object):
             json=data,
             headers=headers
         )
-        print(r.status_code)
         return r.json()
 
 
