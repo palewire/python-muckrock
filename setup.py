@@ -3,7 +3,7 @@ from setuptools import setup
 
 setup(
     name='python-muckrock',
-    version='0.0.9',
+    version='0.0.10',
     description='A simple python wrapper for the MuckRock API',
     author='The Los Angeles Times Data Desk',
     author_email='datadesk@latimes.com',
