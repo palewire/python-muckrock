@@ -67,6 +67,14 @@ Rather than putting your user name and password in your code, consider storing t
 >>> client = MuckRock(token=os.environ['MUCKROCK_TOKEN'])
 ```
 
-### Yet to come.
+### Creating requests
 
-Almost everything. This library does not now support anything beyond simple FOIA list requests and authentication. It cannot create new requests, for example. The API does support those features and I hope to gradually add them.
+Once you've authenticated, you can create an information request by passing in a title, agency id and document request to the `create` method.
+
+```python
+client.foia.create(
+    agency_ids=248,
+    title='API Test File Request',
+    document_request="I would like the government's secret receipe for the world's best burrito"
+)
+```
