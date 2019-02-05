@@ -46,7 +46,7 @@ class BaseMuckRockClient(object):
         if not self.token:
             raise CredentialsMissingError("User login credentials are required to create a request.")
         headers.update({
-            'Authorization': 'Token %s' % self.token,
+            'Authorization': 'Token %s'.format(self.token),
             'User-Agent': self.USER_AGENT
         })
         r = requests.post(
