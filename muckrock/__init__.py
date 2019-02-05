@@ -86,7 +86,7 @@ class BaseEndpointMixin(object):
 
 class JurisdictionEndpoint(BaseMuckRockClient, BaseEndpointMixin):
     """
-    Methods for collecting agencies.
+    Methods for collecting jurisdictions.
     """
     endpoint = "jurisdiction"
 
