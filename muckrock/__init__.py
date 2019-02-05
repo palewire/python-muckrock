@@ -223,6 +223,8 @@ class FoiaEndpoint(BaseMuckRockClient, BaseEndpointMixin):
         }
         if full_text:
             data['full_text'] = full_text
+        if attachments:
+            data['attachments'] = attachments
         return self._post_request(self.BASE_URI + self.endpoint, data)
 
     def filter(
