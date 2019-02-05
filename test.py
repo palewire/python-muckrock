@@ -1,7 +1,11 @@
 import os
 import unittest
 from muckrock import MuckRock
-from muckrock.exceptions import ObjectNotFound
+from muckrock.exceptions import (
+    ObjectNotFound,
+    CredentialsWrongError,
+    CredentialsMissingError
+)
 
 
 class GetTest(unittest.TestCase):
@@ -16,6 +20,10 @@ class GetTest(unittest.TestCase):
             password=os.getenv("MUCKROCK_TEST_PASSWORD")
         )
         self.private_request_id = 67271
+
+    def test_bad_login(self):
+        with self.assertRaises(CredentialsWrongError):
+            MuckRock("foobarfakeuser", os.getenv("MUCKROCK_TEST_PASSWORD"))
 
     def test_jurisdiction_get(self):
         public_obj = self.public_client.jurisdiction.get(1)
@@ -45,6 +53,17 @@ class GetTest(unittest.TestCase):
 
         requires_proxy_list = self.public_client.agency.filter(requires_proxy=True)
         [self.assertEqual(a['requires_proxy'], True) for a in requires_proxy_list]
+
+    def test_foia_create(self):
+        kwargs = dict(
+            agency_id=248,
+            jurisdiction_id=10,
+            title='API Test File Request',
+            document_request="I would like the government's secret receipe for the world's best burrito"
+        )
+        self.private_client.foia.create(**kwargs)
+        with self.assertRaises(CredentialsMissingError):
+            self.public_client.foia.create(**kwargs)
 
     def test_foia_get(self):
         public_obj = self.public_client.foia.get(100)

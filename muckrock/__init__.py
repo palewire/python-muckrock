@@ -3,8 +3,13 @@ Python library for interacting with the MuckRock API.
 
 https://www.muckrock.com/api/
 """
+import os
 import requests
-from .exceptions import ObjectNotFound
+from .exceptions import (
+    ObjectNotFound,
+    CredentialsMissingError,
+    CredentialsWrongError
+)
 
 
 class BaseMuckRockClient(object):
@@ -16,8 +21,8 @@ class BaseMuckRockClient(object):
 
     def __init__(self, username, password, token, base_uri=None):
         self.BASE_URI = base_uri or BaseMuckRockClient.BASE_URI
-        self.username = username
-        self.password = password
+        self.username = username or os.getenv("MUCKROCK_USERNAME")
+        self.password = password or os.getenv("MUCKROCK_PASSWORD")
         self.token = token
 
     def _get_request(self, url, params={}, headers={}):
@@ -27,10 +32,30 @@ class BaseMuckRockClient(object):
         Returns the response as JSON.
         """
         if self.token:
-            headers.update({'Authorization': 'Token %s' % self.token})
+            headers.update({'Authorization': 'Token {}'.format(self.token)})
         headers.update({'User-Agent': self.USER_AGENT})
         response = requests.get(url, params=params, headers=headers)
         return response.json()
+
+    def _post_request(self, url, data={}, headers={}):
+        """
+        Makes a GET request to the Muckrock API.
+
+        Returns the response as JSON.
+        """
+        if not self.token:
+            raise CredentialsMissingError("User login credentials are required to create a request.")
+        headers.update({
+            'Authorization': 'Token %s' % self.token,
+            'User-Agent': self.USER_AGENT
+        })
+        r = requests.post(
+            url,
+            json=data,
+            headers=headers
+        )
+        print(r.status_code)
+        return r.json()
 
 
 class MuckRock(BaseMuckRockClient):
@@ -59,6 +84,7 @@ class MuckRock(BaseMuckRockClient):
         """
         Uses the provided username and password to retrieve an API token.
         """
+        # Ask for the token using the username and password
         r = requests.post(
             'https://www.muckrock.com/api_v1/token-auth/',
             data={
@@ -66,7 +92,15 @@ class MuckRock(BaseMuckRockClient):
                 'password': self.password
             }
         )
-        return r.json()['token']
+        # Get the JSON
+        rjson = r.json()
+
+        # If there's an error, raise it
+        if 'non_field_errors' in rjson:
+            raise CredentialsWrongError(rjson['non_field_errors'])
+
+        # Otherwise return the token
+        return rjson['token']
 
 
 class BaseEndpointMixin(object):
@@ -161,6 +195,32 @@ class FoiaEndpoint(BaseMuckRockClient, BaseEndpointMixin):
     Methods for collecting FOIA requests.
     """
     endpoint = "foia"
+
+    def create(
+        self,
+        title="",
+        document_request="",
+        jurisdiction_id="",
+        agency_id="",
+    ):
+        """
+        Creates a new request.
+        """
+        if not title:
+            raise TypeError("title kwarg required")
+        if not document_request:
+            raise TypeError("document_request kwarg required")
+        if not jurisdiction_id:
+            raise TypeError("jurisdiction_id kwarg required")
+        if not agency_id:
+            raise TypeError("agency_id kwarg required")
+        data = {
+            'jurisdiction': jurisdiction_id,
+            'agency': agency_id,
+            'title': title,
+            'document_request': document_request
+        }
+        return self._post_request(self.BASE_URI + self.endpoint, data)
 
     def filter(
         self,
