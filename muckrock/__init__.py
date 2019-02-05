@@ -54,7 +54,6 @@ class BaseMuckRockClient(object):
             json=data,
             headers=headers
         )
-        print(r.status_code)
         return r.json()
 
 
@@ -200,26 +199,30 @@ class FoiaEndpoint(BaseMuckRockClient, BaseEndpointMixin):
         self,
         title="",
         document_request="",
-        jurisdiction_id="",
-        agency_id="",
+        full_text="",
+        agency_ids=[],
+        embargo=False,
+        permanent_embargo=False,
+        attachments=[]
     ):
         """
         Creates a new request.
         """
         if not title:
             raise TypeError("title kwarg required")
-        if not document_request:
-            raise TypeError("document_request kwarg required")
-        if not jurisdiction_id:
-            raise TypeError("jurisdiction_id kwarg required")
-        if not agency_id:
+        if not document_request and not full_text:
+            raise TypeError("document_request or full_text kwarg required")
+        if not agency_ids:
             raise TypeError("agency_id kwarg required")
         data = {
-            'jurisdiction': jurisdiction_id,
-            'agency': agency_id,
             'title': title,
-            'document_request': document_request
+            'document_request': document_request,
+            'agency': agency_ids,
+            'embargo': embargo,
+            'permanent_embargo': permanent_embargo,
         }
+        if full_text:
+            data['full_text'] = full_text
         return self._post_request(self.BASE_URI + self.endpoint, data)
 
     def filter(
