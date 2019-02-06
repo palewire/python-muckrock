@@ -54,15 +54,15 @@ class GetTest(unittest.TestCase):
         requires_proxy_list = self.public_client.agency.filter(requires_proxy=True)
         [self.assertEqual(a['requires_proxy'], True) for a in requires_proxy_list]
 
-    def test_foia_create(self):
-        kwargs = dict(
-            agency_ids=248,
-            title='API Test File Request',
-            document_request="I would like the government's secret receipe for the world's best burrito"
-        )
-        self.private_client.foia.create(**kwargs)
-        with self.assertRaises(CredentialsMissingError):
-            self.public_client.foia.create(**kwargs)
+#     def test_foia_create(self):
+#         kwargs = dict(
+#             agency_ids=248,
+#             title='API Test File Request',
+#             document_request="I would like the government's secret receipe for the world's best burrito"
+#         )
+#         self.private_client.foia.create(**kwargs)
+#         with self.assertRaises(CredentialsMissingError):
+#             self.public_client.foia.create(**kwargs)
 
     def test_foia_get(self):
         public_obj = self.public_client.foia.get(100)
