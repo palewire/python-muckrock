@@ -75,6 +75,6 @@ Once you've authenticated, you can create an information request by passing in a
 client.foia.create(
     agency_ids=248,
     title='API Test File Request',
-    document_request="I would like the government's secret receipe for the world's best burrito"
+    document_request="I would like the government's secret receipe for the world's best burrito."
 )
 ```
