@@ -1,3 +1,4 @@
+"""Package and release the module."""
 import os
 
 from setuptools import setup
@@ -13,6 +14,7 @@ def read(file_name):
 
 def version_scheme(version):
     """Version scheme hack for setuptools_scm.
+
     Appears to be necessary to due to the bug documented here: https://github.com/pypa/setuptools_scm/issues/342
     If that issue is resolved, this method can be removed.
     """
@@ -30,6 +32,7 @@ def version_scheme(version):
 
 def local_version(version):
     """Local version scheme hack for setuptools_scm.
+
     Appears to be necessary to due to the bug documented here: https://github.com/pypa/setuptools_scm/issues/342
     If that issue is resolved, this method can be removed.
     """
@@ -37,30 +40,30 @@ def local_version(version):
 
 
 setup(
-    name='python-muckrock',
-    version='0.0.10',
-    description='A simple python wrapper for the MuckRock API',
+    name="python-muckrock",
+    version="0.0.10",
+    description="A simple python wrapper for the MuckRock API",
     long_description=read("README.md"),
     long_description_content_type="text/markdown",
-    author='Ben Welsh',
-    author_email='b@palewi.re',
-    url='http://www.github.com/datadesk/python-muckrock/',
+    author="Ben Welsh",
+    author_email="b@palewi.re",
+    url="http://www.github.com/datadesk/python-muckrock/",
     license="MIT",
-    packages=('muckrock',),
+    packages=("muckrock",),
     classifiers=[
-        'Development Status :: 5 - Production/Stable',
-        'Programming Language :: Python',
-        'Programming Language :: Python :: 2',
-        'Programming Language :: Python :: 2.7',
-        'Programming Language :: Python :: 3',
-        'Programming Language :: Python :: 3.7',
-        'Programming Language :: Python :: 3.8',
-        'Programming Language :: Python :: 3.9',
-        'Programming Language :: Python :: 3.10',
-        'License :: OSI Approved :: MIT License',
+        "Development Status :: 5 - Production/Stable",
+        "Programming Language :: Python",
+        "Programming Language :: Python :: 2",
+        "Programming Language :: Python :: 2.7",
+        "Programming Language :: Python :: 3",
+        "Programming Language :: Python :: 3.7",
+        "Programming Language :: Python :: 3.8",
+        "Programming Language :: Python :: 3.9",
+        "Programming Language :: Python :: 3.10",
+        "License :: OSI Approved :: MIT License",
     ],
     install_requires=[
-        'requests>=2.21.0',
+        "requests>=2.21.0",
     ],
     setup_requires=["setuptools_scm"],
     use_scm_version={"version_scheme": version_scheme, "local_scheme": local_version},
