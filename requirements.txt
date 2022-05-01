@@ -1,5 +1,0 @@
-requests
-
-flake8
-python-coveralls
-twine
