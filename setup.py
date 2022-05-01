@@ -41,7 +41,6 @@ def local_version(version):
 
 setup(
     name="python-muckrock",
-    version="0.0.10",
     description="A simple python wrapper for the MuckRock API",
     long_description=read("README.md"),
     long_description_content_type="text/markdown",
