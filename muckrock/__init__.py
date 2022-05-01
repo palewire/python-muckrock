@@ -28,12 +28,12 @@ class BaseMuckRockClient:
 
         Returns the response as JSON.
         """
+        if not headers:
+            headers = {}
         if self.token:
             headers.update({"Authorization": f"Token {self.token}"})
         if not params:
             params = {}
-        if not headers:
-            headers = {}
         headers.update({"User-Agent": self.USER_AGENT})
         response = requests.get(url, params=params, headers=headers)
         return response.json()
