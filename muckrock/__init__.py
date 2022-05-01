@@ -1,10 +1,7 @@
-"""
-Python library for interacting with the MuckRock API.
-
-https://www.muckrock.com/api/
-"""
 import os
+
 import requests
+
 from .exceptions import (
     ObjectNotFound,
     CredentialsMissingError,

@@ -1,9 +1,0 @@
-[run]
-include =
-  muckrock/__init__.py
-  muckrock/decorators.py
-  muckrock/exceptions.py
-
-[report]
-exclude_lines =
-    pragma: no cover
