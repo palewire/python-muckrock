@@ -50,6 +50,7 @@ jobs:
       - id: run
         name: Run tests
         run: pipenv run python test.py
+        shell: bash
         env:
           MUCKROCK_API_TOKEN: ${{ secrets MUCKROCK_API_TOKEN }}
 
