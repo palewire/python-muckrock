@@ -3,7 +3,7 @@
 
 # python-muckrock
 
-A simple python wrapper for the [MuckRock API](https://www.muckrock.com/api/)
+A simple Python wrapper for the [MuckRock API](https://www.muckrock.com/api/)
 
 ## Getting started
 
