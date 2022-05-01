@@ -10,6 +10,11 @@ requests = "*"
 setuptools-scm = "*"
 twine = "*"
 flake8 = "*"
+sphinx = "*"
+sphinx-autobuild = "*"
+myst-parser = "*"
+pre-commit = "*"
+sphinxcontrib-napoleon = "*"
 
 [requires]
 python_version = "3.9"

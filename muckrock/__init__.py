@@ -14,13 +14,17 @@ class BaseMuckRockClient(object):
     Patterns common to all of the different API methods.
     """
     BASE_URI = 'https://www.muckrock.com/api_v1/'
-    USER_AGENT = "python-muckrock (https://github.com/datadesk/python-muckrock)"
+    USER_AGENT = "python-muckrock (https://github.com/palewire/python-muckrock)"
 
-    def __init__(self, username, password, token, base_uri=None):
+    def __init__(self, token=None, base_uri=None):
         self.BASE_URI = base_uri or BaseMuckRockClient.BASE_URI
-        self.username = username or os.getenv("MUCKROCK_USERNAME")
-        self.password = password or os.getenv("MUCKROCK_PASSWORD")
-        self.token = token
+        if token:
+            self.token = token
+        else:
+            if os.getenv("MUCKROCK_API_TOKEN"):
+                self.token = os.getenv("MUCKROCK_API_TOKEN")
+            else:
+                raise ValueError("No API token provided.")
 
     def _get_request(self, url, params={}, headers={}):
         """
@@ -51,7 +55,6 @@ class BaseMuckRockClient(object):
             json=data,
             headers=headers
         )
-        print(r.status_code)
         rjson = r.json()
         if rjson == {'detail': 'Invalid token.'}:
             raise CredentialsWrongError(rjson['detail'])
@@ -64,43 +67,16 @@ class MuckRock(BaseMuckRockClient):
     """
     def __init__(self, username=None, password=None, token=None, base_uri=None):
         # Set all the basic configuration options to this, the parent instance.
-        super(MuckRock, self).__init__(username, password, token, base_uri)
-        # Retrieve a token if necessary
-        if not self.token and self.username and self.password:
-            self.token = self._get_token()
+        super(MuckRock, self).__init__(token, base_uri)
 
         # Initialize the API endpoint methods that are children to this parent
         endpoint_args = (
-            self.username,
-            self.password,
             self.token,
             base_uri
         )
         self.foia = FoiaEndpoint(*endpoint_args)
         self.agency = AgencyEndpoint(*endpoint_args)
         self.jurisdiction = JurisdictionEndpoint(*endpoint_args)
-
-    def _get_token(self):
-        """
-        Uses the provided username and password to retrieve an API token.
-        """
-        # Ask for the token using the username and password
-        r = requests.post(
-            'https://www.muckrock.com/api_v1/token-auth/',
-            data={
-                'username': self.username,
-                'password': self.password
-            }
-        )
-        # Get the JSON
-        rjson = r.json()
-
-        # If there's an error, raise it
-        if 'non_field_errors' in rjson:
-            raise CredentialsWrongError(rjson['non_field_errors'])
-
-        # Otherwise return the token
-        return rjson['token']
 
 
 class BaseEndpointMixin(object):
