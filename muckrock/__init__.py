@@ -21,7 +21,7 @@ class BaseMuckRockClient:
             if os.getenv("MUCKROCK_API_TOKEN"):
                 self.token = os.getenv("MUCKROCK_API_TOKEN")
             else:
-                raise CredentialsMissingError("No API token provided.")
+                self.token = None
 
     def _get_request(self, url, params=None, headers=None):
         """Make a GET request to the Muckrock API.
