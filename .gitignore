@@ -1,3 +1,4 @@
+dist/
 .eggs
 __pycache__
 *.egg-*
