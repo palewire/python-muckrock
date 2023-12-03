@@ -1,7 +1,7 @@
 {
     "_meta": {
         "hash": {
-            "sha256": "693f7576dad8b19f0da5ee5f56379bf4416bf69c4b248773f92b316bf6449220"
+            "sha256": "a282874be6a666722fe599f6671b2dc8faa7f6f4521591982fbb2964d199c4aa"
         },
         "pipfile-spec": 6,
         "requires": {
@@ -348,6 +348,14 @@
             ],
             "markers": "python_full_version >= '3.7.0'",
             "version": "==3.3.2"
+        },
+        "click": {
+            "hashes": [
+                "sha256:ae74fb96c20a0277a1d615f1e4d73c8414f5a98db8b799a7931d1582f3390c28",
+                "sha256:ca9853ad459e787e2192211578cc907e7594e294c7ccc834310722b41b9ca6de"
+            ],
+            "markers": "python_version >= '3.7'",
+            "version": "==8.1.7"
         },
         "colorama": {
             "hashes": [
@@ -1048,6 +1056,15 @@
             "index": "pypi",
             "markers": "python_version >= '3.6'",
             "version": "==2021.3.14"
+        },
+        "sphinx-click": {
+            "hashes": [
+                "sha256:6812c2db62d3fae71a4addbe5a8a0a16c97eb491f3cd63fe34b4ed7e07236f33",
+                "sha256:ae97557a4e9ec646045089326c3b90e026c58a45e083b8f35f17d5d6558d08a0"
+            ],
+            "index": "pypi",
+            "markers": "python_version >= '3.8'",
+            "version": "==5.1.0"
         },
         "sphinx-palewire-theme": {
             "hashes": [

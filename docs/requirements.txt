@@ -4,3 +4,4 @@ sphinxcontrib-napoleon
 sphinx-click
 click
 requests
+sphinx-palewire-theme

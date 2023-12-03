@@ -27,6 +27,7 @@ sphinxcontrib-napoleon = "*"
 sphinxcontrib-mermaid = "*"
 myst-parser = "*"
 sphinx-palewire-theme = "*"
+sphinx-click = "*"
 
 [requires]
 python_version = "3.12"

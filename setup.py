@@ -41,24 +41,22 @@ def local_version(version):
 
 setup(
     name="python-muckrock",
-    description="A simple python wrapper for the MuckRock API",
+    description="A simple Python wrapper for the MuckRock API",
     long_description=read("README.md"),
     long_description_content_type="text/markdown",
     author="Ben Welsh",
     author_email="b@palewi.re",
-    url="http://www.github.com/datadesk/python-muckrock/",
+    url="https://www.github.com/palewire/python-muckrock/",
     license="MIT",
     packages=("muckrock",),
     classifiers=[
         "Development Status :: 5 - Production/Stable",
         "Programming Language :: Python",
-        "Programming Language :: Python :: 2",
-        "Programming Language :: Python :: 2.7",
         "Programming Language :: Python :: 3",
-        "Programming Language :: Python :: 3.7",
-        "Programming Language :: Python :: 3.8",
         "Programming Language :: Python :: 3.9",
         "Programming Language :: Python :: 3.10",
+        "Programming Language :: Python :: 3.11",
+        "Programming Language :: Python :: 3.12",
         "License :: OSI Approved :: MIT License",
     ],
     install_requires=[
@@ -67,7 +65,7 @@ setup(
     setup_requires=["setuptools_scm"],
     use_scm_version={"version_scheme": version_scheme, "local_scheme": local_version},
     project_urls={
-        "Documentation": "http://palewi.re/docs/python-muckrock",
+        "Documentation": "https://palewi.re/docs/python-muckrock",
         "Source": "https://github.com/palewire/python-muckrock",
         "Tracker": "https://github.com/palewire/python-muckrock/issues",
     },
