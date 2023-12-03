@@ -22,7 +22,7 @@ copyright = f"{year} palewire"
 
 exclude_patterns = ["_build"]
 
-html_theme = "palewire-sphinx-theme"
+html_theme = "sphinx-palewire-theme"
 html_theme_options = {
     "canonical_url": f"https://palewi.re/docs/{project}/",
     "nosidebar": True,
