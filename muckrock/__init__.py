@@ -39,10 +39,10 @@ class BaseMuckRockClient:
         if response.status_code != 200:
             if response.json() == {"detail": "Invalid token."}:
                 raise CredentialsWrongError(response.json()["detail"])
-
-            raise ValueError(
-                f"Muckrock API returned with this error: {response.json()}"
-            )
+            else:
+                raise ValueError(
+                    f"Muckrock API returned with this error: {response.json()}"
+                )
         return response.json()
 
     def _post_request(self, url, data=None, headers=None):
