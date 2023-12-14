@@ -243,7 +243,6 @@ class FoiaEndpoint(BaseMuckRockClient, BaseEndpointMixin):
         }
         params["has_datetime_done"] = datetime_done_choices[has_datetime_done]
         params["ordering"] = ordering
-
         return self._get_request(self.BASE_URI + self.endpoint, params)["results"]
 
     def latest(self):
