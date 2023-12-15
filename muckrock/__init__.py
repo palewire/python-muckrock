@@ -36,6 +36,13 @@ class BaseMuckRockClient:
             params = {}
         headers.update({"User-Agent": self.USER_AGENT})
         response = requests.get(url, params=params, headers=headers)
+        if response.status_code != 200:
+            if response.json() == {"detail": "Invalid token."}:
+                raise CredentialsWrongError(response.json()["detail"])
+            else:
+                raise ValueError(
+                    f"Muckrock API returned with this error: {response.json()}"
+                )
         return response.json()
 
     def _post_request(self, url, data=None, headers=None):
@@ -58,9 +65,14 @@ class BaseMuckRockClient:
             }
         )
         r = requests.post(url, json=data, headers=headers)
+
         rjson = r.json()
-        if rjson == {"detail": "Invalid token."}:
-            raise CredentialsWrongError(rjson["detail"])
+        if r.status_code != 201:
+            breakpoint()
+            if rjson == {"detail": "Invalid token."}:
+                raise CredentialsWrongError(rjson["detail"])
+            else:
+                raise ValueError(f"Muckrock API returned with this error: {r.json()}")
         return rjson
 
 
@@ -161,6 +173,7 @@ class FoiaEndpoint(BaseMuckRockClient, BaseEndpointMixin):
         embargo=False,
         permanent_embargo=False,
         attachments=None,
+        organization=None,
     ):
         """Create a new request."""
         if not title:
@@ -182,6 +195,8 @@ class FoiaEndpoint(BaseMuckRockClient, BaseEndpointMixin):
             data["full_text"] = full_text
         if attachments:
             data["attachments"] = attachments
+        if organization:
+            data["organization"] = organization
         return self._post_request(self.BASE_URI + self.endpoint + "/", data)
 
     def filter(
@@ -209,6 +224,9 @@ class FoiaEndpoint(BaseMuckRockClient, BaseEndpointMixin):
         if jurisdiction_id:
             params["jurisdiction"] = jurisdiction_id
         if agency_id:
+            assert isinstance(agency_id, int) or (
+                isinstance(agency_id, str) and agency_id.isdigit()
+            ), "agency_id must be a string"
             params["agency"] = agency_id
         datetime_submitted_choices = {
             None: 1,
