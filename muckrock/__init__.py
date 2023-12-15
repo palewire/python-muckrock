@@ -39,6 +39,8 @@ class BaseMuckRockClient:
         if response.status_code != 200:
             if response.json() == {"detail": "Invalid token."}:
                 raise CredentialsWrongError(response.json()["detail"])
+            elif response.json() == {"detail": "Not found."}:
+                raise ObjectNotFound(response.json()["detail"])
             else:
                 raise ValueError(
                     f"Muckrock API returned with this error: {response.json()}"
