@@ -5,6 +5,8 @@ name = "pypi"
 
 [packages]
 requests = "*"
+pre-commit = "*"
+install = "*"
 
 [dev-packages]
 twine = "*"
