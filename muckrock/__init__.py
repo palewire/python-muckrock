@@ -1,5 +1,8 @@
 """A simple python wrapper for the [MuckRock API."""
+from __future__ import annotations
+
 import os
+from typing import Any
 
 import requests
 
@@ -12,7 +15,7 @@ class BaseMuckRockClient:
     BASE_URI = "https://www.muckrock.com/api_v1/"
     USER_AGENT = "python-muckrock (https://github.com/palewire/python-muckrock)"
 
-    def __init__(self, token=None, base_uri=None):
+    def __init__(self, token: str | None = None, base_uri: str | None = None):
         """Create a new client object."""
         self.BASE_URI = base_uri or BaseMuckRockClient.BASE_URI
         if token:
@@ -23,7 +26,7 @@ class BaseMuckRockClient:
             else:
                 self.token = None
 
-    def _get_request(self, url, params=None, headers=None):
+    def _get_request(self, url: str, params: dict | None = None, headers: dict | None = None) -> Any:
         """Make a GET request to the Muckrock API.
 
         Returns the response as JSON.
@@ -47,7 +50,7 @@ class BaseMuckRockClient:
                 )
         return response.json()
 
-    def _post_request(self, url, data=None, headers=None):
+    def _post_request(self, url: str, data: dict | None = None, headers: dict | None = None) -> Any:
         """Make a GET request to the Muckrock API.
 
         Returns the response as JSON.
@@ -81,7 +84,7 @@ class BaseMuckRockClient:
 class MuckRock(BaseMuckRockClient):
     """The public interface for the DocumentCloud API."""
 
-    def __init__(self, username=None, password=None, token=None, base_uri=None):
+    def __init__(self, username: str | None = None, password: str | None = None, token: str | None = None, base_uri: str | None = None):
         """Create an object."""
         # Set all the basic configuration options to this, the parent instance.
         super().__init__(token, base_uri)
@@ -96,7 +99,7 @@ class MuckRock(BaseMuckRockClient):
 class BaseEndpointMixin:
     """Methods shared by endpoint classes."""
 
-    def get(self, id):
+    def get(self, id: str | int):
         """Return a request with the specified identifer."""
         url = self.BASE_URI + self.endpoint + f"/{id}/"
         r = self._get_request(url)
@@ -112,12 +115,12 @@ class JurisdictionEndpoint(BaseMuckRockClient, BaseEndpointMixin):
 
     def filter(
         self,
-        name=None,
-        abbreviation=None,
-        parent_id=None,
-        level=None,
-        requires_proxy=None,
-    ):
+        name: str | None = None,
+        abbreviation: str | None = None,
+        parent_id: str | int | None = None,
+        level: str | None = None,
+        requires_proxy: bool | None = None,
+    ) -> Any:
         """Return a list of requests that match the provide input filters."""
         params = {}
         if name:
@@ -143,7 +146,7 @@ class AgencyEndpoint(BaseMuckRockClient, BaseEndpointMixin):
 
     endpoint = "agency"
 
-    def filter(self, name=None, status=None, jurisdiction_id=None, requires_proxy=None):
+    def filter(self, name: str | None = None, status: str | None = None, jurisdiction_id: str | int | None = None, requires_proxy: bool | None = None) -> Any:
         """Return a list of requests that match the provide input filters."""
         params = {}
         if name:
@@ -168,15 +171,15 @@ class FoiaEndpoint(BaseMuckRockClient, BaseEndpointMixin):
 
     def create(
         self,
-        title="",
-        document_request="",
-        full_text="",
-        agency_ids=None,
-        embargo=False,
-        permanent_embargo=False,
-        attachments=None,
-        organization=None,
-    ):
+        title: str = "",
+        document_request: str = "",
+        full_text: str = "",
+        agency_ids: list[str | int] | None = None,
+        embargo: bool = False,
+        permanent_embargo: bool = False,
+        attachments: Any | None = None,
+        organization: str | int | None = None,
+    ) -> Any:
         """Create a new request."""
         if not title:
             raise TypeError("title kwarg required")
@@ -203,16 +206,16 @@ class FoiaEndpoint(BaseMuckRockClient, BaseEndpointMixin):
 
     def filter(
         self,
-        user=None,
-        title=None,
-        status=None,
-        embargo=None,
-        jurisdiction_id=None,
-        agency_id=None,
-        has_datetime_submitted=None,
-        has_datetime_done=None,
-        ordering="-datetime_submitted",
-    ):
+        user: str | None = None,
+        title: str | None = None,
+        status: str | None = None,
+        embargo: str | None = None,
+        jurisdiction_id: str | int | None = None,
+        agency_id: str | int | None = None,
+        has_datetime_submitted: bool | None = None,
+        has_datetime_done: bool | None = None,
+        ordering: str ="-datetime_submitted",
+    ) -> Any:
         """Return a list of requests that match the provide input filters."""
         params = {}
         if user:
