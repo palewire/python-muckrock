@@ -228,7 +228,7 @@ class FoiaEndpoint(BaseMuckRockClient, BaseEndpointMixin):
         if agency_id:
             assert isinstance(agency_id, int) or (
                 isinstance(agency_id, str) and agency_id.isdigit()
-            ), "agency_id must be a string"
+            ), "agency_id must be a integer"
             params["agency"] = agency_id
         datetime_submitted_choices = {
             None: 1,
