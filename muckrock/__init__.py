@@ -19,14 +19,13 @@ class BaseMuckRockClient:
         """Create a new client object."""
         self.BASE_URI = base_uri or BaseMuckRockClient.BASE_URI
         if token:
-            self.token = token
+            self.token: str | None = token
         else:
-            if os.getenv("MUCKROCK_API_TOKEN"):
-                self.token = os.getenv("MUCKROCK_API_TOKEN")
-            else:
-                self.token = None
+            self.token = os.getenv("MUCKROCK_API_TOKEN") or None
 
-    def _get_request(self, url: str, params: dict | None = None, headers: dict | None = None) -> Any:
+    def _get_request(
+        self, url: str, params: dict | None = None, headers: dict | None = None
+    ) -> Any:
         """Make a GET request to the Muckrock API.
 
         Returns the response as JSON.
@@ -50,7 +49,9 @@ class BaseMuckRockClient:
                 )
         return response.json()
 
-    def _post_request(self, url: str, data: dict | None = None, headers: dict | None = None) -> Any:
+    def _post_request(
+        self, url: str, data: dict | None = None, headers: dict | None = None
+    ) -> Any:
         """Make a GET request to the Muckrock API.
 
         Returns the response as JSON.
@@ -84,7 +85,13 @@ class BaseMuckRockClient:
 class MuckRock(BaseMuckRockClient):
     """The public interface for the DocumentCloud API."""
 
-    def __init__(self, username: str | None = None, password: str | None = None, token: str | None = None, base_uri: str | None = None):
+    def __init__(
+        self,
+        username: str | None = None,
+        password: str | None = None,
+        token: str | None = None,
+        base_uri: str | None = None,
+    ):
         """Create an object."""
         # Set all the basic configuration options to this, the parent instance.
         super().__init__(token, base_uri)
@@ -99,7 +106,7 @@ class MuckRock(BaseMuckRockClient):
 class BaseEndpointMixin:
     """Methods shared by endpoint classes."""
 
-    def get(self, id: str | int):
+    def get(self, id):
         """Return a request with the specified identifer."""
         url = self.BASE_URI + self.endpoint + f"/{id}/"
         r = self._get_request(url)
@@ -122,7 +129,7 @@ class JurisdictionEndpoint(BaseMuckRockClient, BaseEndpointMixin):
         requires_proxy: bool | None = None,
     ) -> Any:
         """Return a list of requests that match the provide input filters."""
-        params = {}
+        params: dict[str, Any] = {}
         if name:
             params["name"] = name
         if abbreviation:
@@ -146,9 +153,15 @@ class AgencyEndpoint(BaseMuckRockClient, BaseEndpointMixin):
 
     endpoint = "agency"
 
-    def filter(self, name: str | None = None, status: str | None = None, jurisdiction_id: str | int | None = None, requires_proxy: bool | None = None) -> Any:
+    def filter(
+        self,
+        name: str | None = None,
+        status: str | None = None,
+        jurisdiction_id: str | int | None = None,
+        requires_proxy: bool | None = None,
+    ) -> Any:
         """Return a list of requests that match the provide input filters."""
-        params = {}
+        params: dict[str, Any] = {}
         if name:
             params["name"] = name
         if status:
@@ -214,10 +227,10 @@ class FoiaEndpoint(BaseMuckRockClient, BaseEndpointMixin):
         agency_id: str | int | None = None,
         has_datetime_submitted: bool | None = None,
         has_datetime_done: bool | None = None,
-        ordering: str ="-datetime_submitted",
+        ordering: str = "-datetime_submitted",
     ) -> Any:
         """Return a list of requests that match the provide input filters."""
-        params = {}
+        params: dict[str, Any] = {}
         if user:
             params["user"] = user
         if title:
